@@ -1,0 +1,8 @@
+name = "gezellig"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+# Environment variables — set via Wrangler CLI, NOT in this file:
+#   wrangler pages secret put LIVEKIT_API_KEY
+#   wrangler pages secret put LIVEKIT_API_SECRET
