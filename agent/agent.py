@@ -8,7 +8,7 @@ Deployed to LiveKit Agent Cloud.
 import logging
 import os
 
-from livekit.agents import Agent, AgentServer, AgentSession, cli, inference
+from livekit.agents import Agent, AgentServer, AgentSession, cli
 from livekit.plugins import openai as lk_openai
 from livekit.plugins import silero, tavus
 
@@ -118,20 +118,10 @@ async def entrypoint(ctx):
         persona_id=os.environ["TAVUS_PERSONA_ID"],
     )
 
-    # --- STT: Deepgram Nova-3, Dutch ---
-    stt = inference.STT(model="deepgram/nova-3", language="nl")
-
-    # --- TTS: Cartesia Sonic 3, Dutch voice ---
-    tts = inference.TTS(
-        model="cartesia/sonic-3",
-        voice="4aa74047-d005-4463-ba2e-a0d9b261fb87",
-        language="nl",
-    )
-
     session = AgentSession(
-        stt=stt,
+        stt="deepgram/nova-3:nl",
         llm=llm,
-        tts=tts,
+        tts="cartesia/sonic:4aa74047-d005-4463-ba2e-a0d9b261fb87",
         vad=silero.VAD.load(),
     )
 
