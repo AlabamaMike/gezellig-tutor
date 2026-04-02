@@ -1,0 +1,8 @@
+[project]
+subdomain = "janice-ah5t3gsm"
+
+[agent]
+id = "CA_VwKup8tzaoNP"
+name = "gezellig"
+entrypoint = "agent.py"
+python_version = "3.11"

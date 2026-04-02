@@ -8,8 +8,7 @@ Deployed to LiveKit Agent Cloud.
 import logging
 import os
 
-from livekit.agents import Agent, AgentSession, cli
-from livekit.agents.llm import ChatContext
+from livekit.agents import Agent, AgentServer, AgentSession, cli
 from livekit.plugins import openai as lk_openai
 from livekit.plugins import silero, tavus
 
@@ -97,8 +96,13 @@ GREETING = (
 )
 
 
-def build_session() -> AgentSession:
-    """Construct the AgentSession with all pipeline components."""
+server = AgentServer()
+
+
+@server.rtc_session(agent_name="gezellig")
+async def entrypoint(ctx):
+    """Called when a student connects to a room."""
+    logger.info(f"Student connected to room: {ctx.room.name}")
 
     # --- LLM: Mercury2 via OpenAI-compatible endpoint ---
     llm = lk_openai.LLM(
@@ -108,12 +112,6 @@ def build_session() -> AgentSession:
         temperature=0.7,
     )
 
-    # --- STT: Deepgram Nova-3 via LiveKit Inference ---
-    stt_model = "deepgram/nova-3"
-
-    # --- TTS: Cartesia via LiveKit Inference ---
-    tts_model = "cartesia/sonic"
-
     # --- Avatar: Tavus ---
     avatar = tavus.AvatarSession(
         replica_id=os.environ["TAVUS_REPLICA_ID"],
@@ -121,26 +119,18 @@ def build_session() -> AgentSession:
     )
 
     session = AgentSession(
-        stt=stt_model,
+        stt="deepgram/nova-3",
         llm=llm,
-        tts=tts_model,
+        tts="cartesia/sonic",
         vad=silero.VAD.load(),
-        avatar=avatar,
     )
 
-    return session
-
-
-async def entrypoint(ctx):
-    """Called when a student connects to a room."""
-    logger.info(f"Student connected to room: {ctx.room.name}")
-
-    session = build_session()
     agent = Agent(instructions=SYSTEM_PROMPT)
 
     await session.start(agent=agent, room=ctx.room)
-    await session.say(GREETING, allow_interruptions=True)
+    await avatar.start(session, ctx.room)
+    session.say(GREETING, allow_interruptions=True)
 
 
 if __name__ == "__main__":
-    cli.run_app(entrypoint)
+    cli.run_app(server)
