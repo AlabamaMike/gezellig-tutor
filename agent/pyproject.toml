@@ -1,0 +1,12 @@
+[project]
+name = "gezellig-agent"
+version = "0.1.0"
+description = "Gezellig — Dutch conversation tutor voice agent with virtual avatar"
+requires-python = ">=3.11"
+dependencies = [
+    "livekit-agents[openai,silero,turn-detector]~=1.4",
+    "livekit-plugins-tavus~=0.1",
+]
+
+[project.scripts]
+agent = "agent:main"
