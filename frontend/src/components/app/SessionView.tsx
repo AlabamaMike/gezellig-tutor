@@ -1,4 +1,8 @@
-import { useSessionContext } from "@livekit/components-react";
+import {
+  useAgent,
+  useSessionContext,
+  useSessionMessages,
+} from "@livekit/components-react";
 import { AgentControlBar } from "@/components/agents-ui/agent-control-bar";
 import { AgentChatTranscript } from "@/components/agents-ui/agent-chat-transcript";
 import { AgentAudioVisualizerBar } from "@/components/agents-ui/agent-audio-visualizer-bar";
@@ -10,6 +14,8 @@ interface SessionViewProps {
 
 export function SessionView({ onDisconnect }: SessionViewProps) {
   const session = useSessionContext();
+  const agent = useAgent();
+  const { messages } = useSessionMessages();
 
   const handleDisconnect = async () => {
     await session.end();
@@ -37,12 +43,18 @@ export function SessionView({ onDisconnect }: SessionViewProps) {
             </h3>
           </div>
           <div className="h-96 overflow-y-auto p-4">
-            <AgentChatTranscript />
+            <AgentChatTranscript
+              agentState={agent.state}
+              messages={messages}
+            />
           </div>
         </div>
 
         <div className="rounded-2xl border border-border bg-card p-4 shadow-xl">
-          <AgentControlBar onDisconnect={handleDisconnect} />
+          <AgentControlBar
+            isConnected={session.isConnected}
+            onDisconnect={handleDisconnect}
+          />
         </div>
       </div>
     </div>
