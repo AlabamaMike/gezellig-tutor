@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Environment
+.env
+.env.local
+.env.production
+.dev.vars
+
+# Build
+dist/
+.wrangler/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
