@@ -1,9 +1,4 @@
-import {
-  VideoTrack,
-  useAgent,
-  useSession,
-  useSessionContext,
-} from "@livekit/components-react";
+import { useSessionContext } from "@livekit/components-react";
 import { AgentControlBar } from "@/components/agents-ui/agent-control-bar";
 import { AgentChatTranscript } from "@/components/agents-ui/agent-chat-transcript";
 import { AgentAudioVisualizerBar } from "@/components/agents-ui/agent-audio-visualizer-bar";
@@ -14,11 +9,10 @@ interface SessionViewProps {
 }
 
 export function SessionView({ onDisconnect }: SessionViewProps) {
-  const session = useSession();
-  const agent = useAgent();
+  const session = useSessionContext();
 
   const handleDisconnect = async () => {
-    await session.disconnect();
+    await session.end();
     onDisconnect();
   };
 

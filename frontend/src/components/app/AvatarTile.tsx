@@ -31,7 +31,7 @@ export function AvatarTile() {
     <div className="aspect-video overflow-hidden bg-neutral-900">
       <VideoTrack
         trackRef={{
-          participant: avatarParticipant,
+          participant: avatarParticipant!,
           publication: videoTrack,
           source: Track.Source.Camera,
         }}

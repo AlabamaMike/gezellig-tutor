@@ -1,15 +1,15 @@
-import { useSession } from "@livekit/components-react";
+import { useSessionContext } from "@livekit/components-react";
 
 interface WelcomeViewProps {
   onConnect: () => void;
 }
 
 export function WelcomeView({ onConnect }: WelcomeViewProps) {
-  const session = useSession();
+  const session = useSessionContext();
 
   const handleStart = async () => {
     try {
-      await session.connect();
+      await session.start();
       onConnect();
     } catch (error) {
       console.error("Failed to connect:", error);
